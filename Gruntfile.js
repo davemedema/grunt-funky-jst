@@ -10,7 +10,12 @@ module.exports = function(grunt) {
     // clean
     // ---
     clean: {
-      test: ['tmp/*']
+      release: [
+        'npm-debug.log'
+      ],
+      test: [
+        'tmp/*'
+      ]
     },
 
     // jshint
