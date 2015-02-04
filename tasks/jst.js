@@ -1,6 +1,6 @@
 /*
- * grunt-funky-tag
- * https://github.com/davemedema/grunt-funky-tag
+ * grunt-funky-jst
+ * https://github.com/davemedema/grunt-funky-jst
  *
  * Copyright (c) 2013 Dave Medema
  * Licensed under the MIT license.
@@ -8,60 +8,8 @@
 
 'use strict';
 
-var shell = require('shelljs');
-var semver = require('semver');
-
-/**
- * Executes a shell command.
- *
- * @param {String} command
- */
-function exec(command) {
-  return shell.exec(command, { silent: true });
-}
-
-var repo = {
-
-  /**
-   * Checks whether a repo exists.
-   *
-   * @return {Boolean}
-   */
-  exists: function() {
-    return (exec('git status').code === 0);
-  },
-
-  /**
-   * Returns the highest tag in the repo.
-   *
-   * @return {String}
-   */
-  getHighestTag: function() {
-    var highestTag = '0.0.0';
-    var tags = exec('git tag');
-
-    if (tags.code !== 0) return highestTag;
-
-    tags = tags.output.split('\n');
-    tags.forEach(function(tag) {
-      tag = semver.valid(tag);
-      if (tag && (!highestTag || semver.gt(tag, highestTag))) {
-        highestTag = tag;
-      }
-    });
-
-    return highestTag;
-  },
-
-  /**
-   * Checks if the repo is clean.
-   *
-   * @return {Boolean}
-   */
-  isClean: function() {
-    return (exec('git diff-index --quiet HEAD --').code === 0);
-  }
-};
+var minify = require('html-minifier').minify;
+var path   = require('path');
 
 /**
  * Exports.
@@ -70,44 +18,36 @@ var repo = {
  */
 module.exports = function(grunt) {
 
-  // Register task
-  grunt.registerTask('tag', 'Commit and tag.', function() {
-    var pkg = grunt.config('pkg');
-    var tag = pkg.version;
+  grunt.registerMultiTask('jst', function() {
+    var opts = this.options({
+    });
 
-    // make sure we have a valid tag
-    if (!semver.valid(tag)) {
-      grunt.warn('"' + tag + '" is not a valid semantic version.');
-    }
+    this.files.forEach(function(fm) {
+      var dest = fm.dest;
+      var jst  = {};
 
-    // make sure have a repository
-    if (!repo.exists()) {
-      grunt.warn('Repository not found.');
-    }
+      fm.src.forEach(function(filepath) {
+        var ext = path.extname(filepath);
+        var key = path.basename(filepath, ext);
 
-    // validate tag
-    var highestTag = repo.getHighestTag();
+        var html = grunt.file.read(filepath);
 
-    if (highestTag && !semver.gt(tag, highestTag)) {
-      grunt.warn('"' + tag + '" is lower or equal than the current highest tag "' + highestTag + '".');
-    }
+        html = minify(html, {
+          collapseWhitespace: true,
+          keepClosingSlash:   true,
+          removeComments:     true
+        });
 
-    // commit
-    if (!repo.isClean()) {
-      exec('git add .');
-      if (exec('git commit -a -m "' + tag + '"').code === 0) {
-        grunt.log.ok('Committed as: ' + tag);
-      }
-    }
+        jst[key] = html;
+      });
 
-    // tag
-    var tagCmd = exec('git tag v' + tag);
+      jst = JSON.stringify(jst);
+      jst = 'var JST = ' + jst + ';';
 
-    if (tagCmd.code !== 0) {
-      grunt.warn('Couldn\'t tag the last commit.', tagCmd.output);
-    } else {
-      grunt.log.ok('Tagged as: ' + tag);
-    }
+      grunt.file.write(dest, jst);
+
+      grunt.log.ok('Created: ' + dest);
+    });
   });
 
 };

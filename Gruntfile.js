@@ -2,20 +2,19 @@
 
 module.exports = function(grunt) {
 
-  // Config
-  // ---
-
   grunt.initConfig({
 
-    // package.json
+    // pkg
     pkg: grunt.file.readJSON('package.json'),
 
-    // `clean`
+    // clean
+    // ---
     clean: {
-      test: ['tmp']
+      test: ['tmp/*']
     },
 
-    // `jshint`
+    // jshint
+    // ---
     jshint: {
       options: {
         jshintrc: '.jshintrc'
@@ -23,38 +22,55 @@ module.exports = function(grunt) {
       all: [
         'Gruntfile.js',
         'tasks/**/*.js',
-        'test/**/*_test.js'
+        '<%= nodeunit.files %>'
       ]
     },
 
-    // `nodeunit`
+    // jst
+    // ---
+    jst: {
+      test: {
+        src: ['test/fixtures/**/*.html'],
+        dest: 'tmp/templates.js'
+      }
+    },
+
+    // nodeunit
+    // ---
     nodeunit: {
       files: ['test/**/*_test.js']
     }
   });
 
-  // Load tasks
-  // ---
+  // Load
+  // ---------------------------------------------------------------------------
 
   grunt.loadTasks('tasks');
 
-  // Load npm tasks
-  // ---
-
   require('load-grunt-tasks')(grunt);
 
-  // Task aliases
-  // ---
+  // Aliases
+  // ---------------------------------------------------------------------------
 
+  // `grunt`
+  // ---
   grunt.registerTask('default', ['test']);
 
+  // `release`
+  // ---
   grunt.registerTask('release', function(type) {
     grunt.task.run('test');
     grunt.task.run('bump:' + (type || 'patch'));
     grunt.task.run('tag');
   });
 
-  grunt.registerTask('test', ['clean', 'jshint', 'nodeunit']);
-  grunt.registerTask('t', ['test']);
+  // `test`
+  // ---
+  grunt.registerTask('test', [
+    'clean:test',
+    'jshint',
+    'jst:test',
+    'nodeunit'
+  ]);
 
 };

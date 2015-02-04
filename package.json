@@ -1,7 +1,7 @@
 {
   "name": "grunt-funky-jst",
   "description": "JST",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/davemedema/grunt-funky-jst",
   "author": {
     "name": "Dave Medema",
@@ -40,8 +40,8 @@
     "grunt-contrib-jshint": "*",
     "grunt-contrib-nodeunit": "*",
     "grunt-funky-bump": "*",
-    "load-grunt-tasks": "*",
-    "semver": "*",
-    "shelljs": "*"
+    "grunt-funky-tag": "*",
+    "html-minifier": "*",
+    "load-grunt-tasks": "*"
   }
 }
