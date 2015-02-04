@@ -1,0 +1,3 @@
+# grunt-funky-jst
+
+JST

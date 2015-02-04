@@ -1,0 +1,47 @@
+{
+  "name": "grunt-funky-jst",
+  "description": "JST",
+  "version": "0.0.1",
+  "homepage": "https://github.com/davemedema/grunt-funky-jst",
+  "author": {
+    "name": "Dave Medema",
+    "email": "davemedema@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/davemedema/grunt-funky-jst/issues"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "keywords": [
+    "gruntplugin",
+    "jst"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/davemedema/grunt-funky-jst/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "peerDependencies": {
+    "grunt": "~0.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/davemedema/grunt-funky-jst.git"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "dependencies": {
+    "grunt": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-nodeunit": "*",
+    "grunt-funky-bump": "*",
+    "load-grunt-tasks": "*",
+    "semver": "*",
+    "shelljs": "*"
+  }
+}
