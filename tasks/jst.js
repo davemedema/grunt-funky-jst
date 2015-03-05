@@ -28,7 +28,6 @@ module.exports = function(grunt) {
       var jst        = {};
       var output     = '';
       var outputPath = path.resolve(__dirname + '/../tasks/templates/output-template.js');
-      console.log(outputPath);
 
       fm.src.forEach(function(filepath) {
         var html  = '';
