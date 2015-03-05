@@ -24,9 +24,11 @@ module.exports = function(grunt) {
     });
 
     this.files.forEach(function(fm) {
-      var dest   = fm.dest;
-      var jst    = {};
-      var output = '';
+      var dest       = fm.dest;
+      var jst        = {};
+      var output     = '';
+      var outputPath = path.resolve(__dirname + '/../tasks/templates/output-template.js');
+      console.log(outputPath);
 
       fm.src.forEach(function(filepath) {
         var html  = '';
@@ -53,7 +55,7 @@ module.exports = function(grunt) {
 
       jst = JSON.stringify(jst);
 
-      output = grunt.file.read('lib/output-template.js');
+      output = grunt.file.read(outputPath);
       output = output.replace('{{jst}}', jst);
 
       grunt.file.write(dest, output);
