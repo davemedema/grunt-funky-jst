@@ -20,17 +20,27 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('jst', function() {
     var opts = this.options({
+      root: 'app'
     });
 
     this.files.forEach(function(fm) {
-      var dest = fm.dest;
-      var jst  = {};
+      var dest   = fm.dest;
+      var jst    = {};
+      var output = '';
 
       fm.src.forEach(function(filepath) {
-        var ext = path.extname(filepath);
-        var key = path.basename(filepath, ext);
+        var html  = '';
+        var key   = '';
+        var split = filepath.split(opts.root);
 
-        var html = grunt.file.read(filepath);
+        if (!split.length) return;
+
+        key = split
+          .pop()
+          .replace(/^\//g, '')
+          .replace('.html', '');
+
+        html = grunt.file.read(filepath);
 
         html = minify(html, {
           collapseWhitespace: true,
@@ -42,9 +52,11 @@ module.exports = function(grunt) {
       });
 
       jst = JSON.stringify(jst);
-      jst = 'var JST = ' + jst + ';';
 
-      grunt.file.write(dest, jst);
+      output = grunt.file.read('lib/output-template.js');
+      output = output.replace('{{jst}}', jst);
+
+      grunt.file.write(dest, output);
 
       grunt.log.ok('Created: ' + dest);
     });

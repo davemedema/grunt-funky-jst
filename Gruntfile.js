@@ -35,6 +35,9 @@ module.exports = function(grunt) {
     // ---
     jst: {
       test: {
+        options: {
+          root: 'fixtures'
+        },
         src: ['test/fixtures/**/*.html'],
         dest: 'tmp/templates.js'
       }
