@@ -4,7 +4,7 @@
   } else if (typeof exports === 'object') {
     module.exports = factory();
   } else {
-    root.JST = factory();
+    root.{{global}} = factory();
   }
 }(this, function() {
   return {{jst}};

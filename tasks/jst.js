@@ -20,7 +20,8 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('jst', function() {
     var opts = this.options({
-      root: 'app'
+      global: 'JST',
+      root:   'app'
     });
 
     this.files.forEach(function(fm) {
@@ -55,6 +56,7 @@ module.exports = function(grunt) {
       jst = JSON.stringify(jst);
 
       output = grunt.file.read(outputPath);
+      output = output.replace('{{global}}', opts.global);
       output = output.replace('{{jst}}', jst);
 
       grunt.file.write(dest, output);
