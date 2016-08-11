@@ -76,7 +76,7 @@ module.exports = function(grunt) {
   // ---
   grunt.registerTask('test', [
     'clean:test',
-    'jshint',
+    // 'jshint',
     'jst:test',
     'nodeunit'
   ]);
