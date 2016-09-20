@@ -1,11 +1,11 @@
-(function(root, factory) {
+;(function (root, factory) {
   if (typeof define === 'function' && define.amd) {
-    define([], factory);
+    define([], factory)
   } else if (typeof exports === 'object') {
-    module.exports = factory();
+    module.exports = factory()
   } else {
-    root.{{global}} = factory();
+    root.{{global}} = factory()
   }
-}(this, function() {
-  return {{jst}};
-}));
+}(this, function () {
+  return {{jst}}
+}))
